@@ -4,7 +4,7 @@
 
 
 MODULE_LICENSE("GPL");  // Macros that decide the license of the module
-MODULE_AUTHOR("KAJOL");
+MODULE_AUTHOR("ashutosh");
 MODULE_DESCRIPTION("A parameter passing module");
 
 /* variables are declared as static to keep their scope local to this module */
@@ -12,8 +12,6 @@ MODULE_DESCRIPTION("A parameter passing module");
 static char * charvar = "Module";
 static int intvar = 10;
 
-/* using the following macros, varibales are enable to be modified from command */
-/* module_param takes three arguments: var name, types of variable, permission */
 
 module_param(charvar, charp, S_IRUGO);     // charp = character pointer
 module_param(intvar, int, S_IRUGO);
@@ -40,4 +38,3 @@ module_init(param_init);  // for INITIALIZATION function
 module_exit(param_exit);  // for CLEANUP function
 
 
-// argument command ==> insmod file.ko charvar="module name"  //
