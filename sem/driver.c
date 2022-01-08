@@ -15,7 +15,7 @@
 
 //seqlock declaration
 
-DEFINE_SPINLOCK(etx_spinlock);
+DEFINE_SEMAPHORE(sem);
 DECLARE_COMPLETION(read);
 DECLARE_COMPLETION(write);
 dev_t dev;
@@ -80,11 +80,11 @@ ssize_t CAN_write(struct file *filp,const char __user *Ubuff,size_t count,loff_t
 unsigned long result;
 ssize_t retval;
    
-    spin_lock(&etx_spinlock);
+    down(&sem);
     result = copy_from_user((char *)Kbuff,(char *)Ubuff, count);
     complete(&write);
     wait_for_completion_interruptible(&read);
-        spin_unlock(&etx_spinlock);
+        up(&sem);
     if(result==0)
         {
             printk(KERN_ALERT "\n DATA write SUCESSFULLY!! \n");
@@ -111,7 +111,7 @@ ssize_t retval;
 
 static int __init prog_init(void)
 {
-    if((alloc_chrdev_region(&dev,28,1,"CAN"))<0)
+    if((alloc_chrdev_region(&dev,0,1,"SEM"))<0)
     {
         printk("\n cannot create major number..\n");
         return -1;
